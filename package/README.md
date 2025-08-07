@@ -1,4 +1,4 @@
-# Orchestra Package
+# Enso Labs - Agent Core
 
 A TypeScript package for managing AI agent workflows with memory, tool execution, and conversation state management.
 

@@ -1,6 +1,6 @@
 {
   "name": "@enso-labs/agent-core",
-  "version": "1.0.0",
+  "version": "0.0.1-rc2",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -9,7 +9,7 @@
     "README.md"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && cp README.md dist/",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
