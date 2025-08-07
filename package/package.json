@@ -1,0 +1,27 @@
+{
+  "name": "@enso-labs/agent-core",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@types/node": "^24.2.0",
+    "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "@langchain/core": "^0.3.67",
+    "langchain": "^0.3.30"
+  }
+}
