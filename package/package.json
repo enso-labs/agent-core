@@ -6,10 +6,13 @@
   "types": "dist/index.d.ts",
   "files": [
     "dist/",
-    "README.md"
+    "README.md",
+    "package.json",
+    "package-lock.json"
   ],
   "scripts": {
     "build": "tsc && cp README.md dist/",
+    "publish": "npm run build && npm publish --access public",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
