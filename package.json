@@ -1,6 +1,6 @@
 {
   "name": "@enso-labs/agent-core",
-  "version": "0.0.1-rc3",
+  "version": "0.0.1-rc5",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -13,7 +13,7 @@
   "scripts": {
     "start": "tsx src/index.ts",
     "build": "tsc && cp README.md dist/",
-    "publish": "npm run build && npm publish --access public",
+    "deploy": "npm run build && npm publish --access public",
     "test": "tsx --test --env-file=.env.test test/**/*.test.ts",
     "test:agent": "tsx --test --env-file=.env.test test/agent.test.ts"
   },
