@@ -20,7 +20,7 @@ async function main() {
 		prompt: "What is the weather in San Francisco?",
 		tools: [getWeatherTool as unknown as Tool],
 	});
-	console.log(response);
+	console.log(JSON.stringify(response, null, 2));
 }
 
 main();
