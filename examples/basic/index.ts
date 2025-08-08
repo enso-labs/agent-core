@@ -3,7 +3,6 @@ import {z} from 'zod';
 import {tool} from '@langchain/core/tools';
 import { Tool } from 'langchain/tools';
 import { agentLoop } from '@enso-labs/agent-core';
-import { ThreadState } from '@enso-labs/agent-core/dist/entities/state';
 
 function getWeather(location: string) {
   return `The weather in ${location} is sunny and 70 degrees`;
@@ -16,25 +15,12 @@ const getWeatherTool = tool(getWeather, {
 	}),
 });
 
-const state: ThreadState = {
-	thread: {
-		usage: {
-			prompt_tokens: 0,
-			completion_tokens: 0,
-			total_tokens: 0,
-		},
-		events: [],
-	},
-};
-
 async function main() {
-	const response = await agentLoop(
-		"What is the weather in San Francisco?",
-		state,
-		"openai:gpt-4o-mini",
-		[getWeatherTool] as unknown as Tool[]
-	);
-	console.log(response);
+	const response = await agentLoop({
+		prompt: "What is the weather in San Francisco?",
+		tools: [getWeatherTool as unknown as Tool],
+	});
+	console.log(JSON.stringify(response, null, 2));
 }
 
 main();

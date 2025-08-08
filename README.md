@@ -77,15 +77,15 @@ console.log(xmlString);
 // Output: <thread>\n<event intent="user_input">Hello</event>\n</thread>
 ```
 
-#### `agentLoop(query, state, model?, tools?)`
+#### `agentLoop({ prompt, model?, tools?, state? })`
 
 Main orchestration function that processes user queries through the complete agent workflow.
 
-**Parameters:**
-- `query`: `string` - User input query
-- `state`: `ThreadState` - Current thread state
-- `model?`: `string` - Model identifier (default: 'openai:gpt-4o-mini')
+**Parameters (Object):**
+- `prompt`: `string` - User input query
+- `model?`: `string` - Model identifier (default: 'openai:gpt-4.1-nano')
 - `tools?`: `Tool[]` - Array of available tools (default: [])
+- `state?`: `ThreadState` - Current thread state (default: empty state with usage tracking)
 
 **Returns:** `Promise<AgentResponse>` - Response containing content, updated state, and token usage
 
@@ -94,6 +94,13 @@ Main orchestration function that processes user queries through the complete age
 import { agentLoop } from '@enso-labs/agent-core';
 import type { ThreadState } from '@enso-labs/agent-core';
 
+// Simple usage with just a prompt
+const response = await agentLoop({
+  prompt: "What is the weather like today?",
+  tools: weatherTools
+});
+
+// Advanced usage with custom state
 const initialState: ThreadState = {
   thread: {
     usage: { prompt_tokens: 0, completion_tokens: 0, total_tokens: 0 },
@@ -101,12 +108,12 @@ const initialState: ThreadState = {
   }
 };
 
-const response = await agentLoop(
-  'What is the weather like today?',
-  initialState,
-  'openai:gpt-4o-mini',
-  weatherTools
-);
+const response = await agentLoop({
+  prompt: 'What is the weather like today?',
+  state: initialState,
+  model: 'openai:gpt-4o-mini',
+  tools: weatherTools
+});
 
 console.log(response.content); // AI response
 console.log(response.tokens);  // Token usage stats

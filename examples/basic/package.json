@@ -3,9 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "tsx index.ts",
+    "start": "tsx index.ts",
     "build": "tsc index.ts",
-    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -18,7 +17,7 @@
     "typescript": "^5.9.2"
   },
   "dependencies": {
-    "@enso-labs/agent-core": "^0.0.1-rc2",
+    "@enso-labs/agent-core": "^0.0.1-rc6",
     "dotenv": "^17.2.1"
   }
 }
