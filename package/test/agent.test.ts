@@ -4,7 +4,7 @@ import { agentLoop } from '../src/index.js';
 import { Tool, tool } from '@langchain/core/tools';
 import { z } from 'zod';
 
-function getWeather(location: string) {
+function getWeather({location}: {location: string}): string {
   return `The weather in ${location} is sunny and 70 degrees`;
 }
 const getWeatherTool = tool(getWeather, {
@@ -16,15 +16,13 @@ const getWeatherTool = tool(getWeather, {
 });
 
 test('agentLoop returns response', async () => {
-  const state = {
-    thread: {
-      usage: { prompt_tokens: 0, completion_tokens: 0, total_tokens: 0 },
-      events: []
-    }
-  };
   
-  const result = await agentLoop('Weather in Tokyo?', state, "openai:gpt-4o-mini", [getWeatherTool] as unknown as Tool[]);
+  const result = await agentLoop({
+    prompt: 'Weather in Tokyo?',
+    tools: [getWeatherTool] as unknown as Tool[],
+  });
   
+  console.log(JSON.stringify(result, null, 2));
   assert(result.content);
   assert(result.state);
 });

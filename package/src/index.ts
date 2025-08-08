@@ -119,18 +119,29 @@ export function convertStateToXML(state: ThreadState): string {
 	return `<thread>\n${events}\n</thread>`;
 }
 
-export async function agentLoop(
-	query: string,
-	state: ThreadState,
-	model: string = 'openai:gpt-4o-mini',
-	tools: Tool[] = [],
-): Promise<AgentResponse> {
+export async function agentLoop({
+    prompt,
+    model = "openai:gpt-4o-mini",
+    tools = [],
+		state = {
+        thread: {
+            events: [],
+						usage: { prompt_tokens: 0, completion_tokens: 0, total_tokens: 0 },
+        },
+    },
+}: {
+    prompt: string;
+    model?: string;
+		tools?: Tool[];
+		systemMessage?: string;
+    state?: ThreadState;
+}): Promise<AgentResponse> {
 	// Add user input to memory
-	state = await agentMemory('user_input', query, state);
+	state = await agentMemory('user_input', prompt, state);
 
 	// Tool execution - classify all tools from the input at once
 	const [toolIntents, usage_metadata] = await classifyIntent(
-		query,
+		prompt,
 		model.toString(),
 		tools,
 	);

@@ -11,9 +11,11 @@
     "package-lock.json"
   ],
   "scripts": {
+    "start": "tsx src/index.ts",
     "build": "tsc && cp README.md dist/",
     "publish": "npm run build && npm publish --access public",
-    "test": "tsx --test test/**/*.test.ts"
+    "test": "tsx --test --env-file=.env.test test/**/*.test.ts",
+    "test:agent": "tsx --test --env-file=.env.test test/agent.test.ts"
   },
   "keywords": [],
   "author": "",
