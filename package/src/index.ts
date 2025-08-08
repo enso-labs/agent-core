@@ -5,6 +5,8 @@ import type { ToolIntent } from "./entities/tool.js";
 import { Tool } from "langchain/tools";
 
 
+export const DEFAULT_MODEL = "openai:gpt-4.1-nano";
+
 export async function agentMemory(
 	toolIntent: {intent: string; args: any} | string,
 	content: string,
@@ -121,7 +123,7 @@ export function convertStateToXML(state: ThreadState): string {
 
 export async function agentLoop({
     prompt,
-    model = "openai:gpt-4o-mini",
+    model = DEFAULT_MODEL,
     tools = [],
 		state = {
         thread: {

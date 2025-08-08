@@ -1,4 +1,4 @@
-import { test } from 'node:test';
+import { test, it, describe } from 'node:test';
 import assert from 'node:assert';
 import { agentLoop } from '../src/index.js';
 import { Tool, tool } from '@langchain/core/tools';
@@ -15,14 +15,24 @@ const getWeatherTool = tool(getWeather, {
 	}),
 });
 
-test('agentLoop returns response', async () => {
-  
-  const result = await agentLoop({
-    prompt: 'Weather in Tokyo?',
-    tools: [getWeatherTool] as unknown as Tool[],
+describe('agentLoop', () => {
+
+  it('should return a response', async () => {
+    const result = await agentLoop({
+      prompt: 'Who won the 2001 world series?',
+    });
+    console.log(JSON.stringify(result, null, 2));
+    assert(result.content);
+    assert(result.state);
   });
-  
-  console.log(JSON.stringify(result, null, 2));
-  assert(result.content);
-  assert(result.state);
+
+  it('should return a tool call response', async () => {
+    const result = await agentLoop({
+      prompt: 'What is the weather in Tokyo?',
+      tools: [getWeatherTool] as unknown as Tool[],
+    });
+    console.log(JSON.stringify(result, null, 2));
+    assert(result.content);
+    assert(result.state);
+  });
 });
