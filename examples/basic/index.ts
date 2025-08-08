@@ -4,7 +4,7 @@ import {tool} from '@langchain/core/tools';
 import { Tool } from 'langchain/tools';
 import { agentLoop } from '@enso-labs/agent-core';
 
-function getWeather(location: string) {
+function getWeather({ location }: { location: string }) {
   return `The weather in ${location} is sunny and 70 degrees`;
 }
 const getWeatherTool = tool(getWeather, {
