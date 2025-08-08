@@ -18,7 +18,7 @@
     "typescript": "^5.9.2"
   },
   "dependencies": {
-    "@enso-labs/agent-core": "^0.0.1-rc2",
+    "@enso-labs/agent-core": "^0.0.1-rc3",
     "dotenv": "^17.2.1"
   }
 }
