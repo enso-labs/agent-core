@@ -13,7 +13,7 @@
   "scripts": {
     "build": "tsc && cp README.md dist/",
     "publish": "npm run build && npm publish --access public",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "tsx --test test/**/*.test.ts"
   },
   "keywords": [],
   "author": "",
@@ -21,6 +21,9 @@
   "description": "",
   "devDependencies": {
     "@types/node": "^24.2.0",
+    "ts-jest": "^29.4.1",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.20.3",
     "typescript": "^5.9.2"
   },
   "dependencies": {
