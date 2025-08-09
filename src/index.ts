@@ -3,7 +3,7 @@ import { classifyIntent } from "./utils/classify.js";
 import { callModel } from "./utils/llm.js";
 import type { ToolIntent } from "./entities/tool.js";
 import { Tool } from "langchain/tools";
-
+import { jsonHandler, streamHandler } from "./utils/stream.js";
 
 export const DEFAULT_MODEL = "openai:gpt-4.1-nano";
 
@@ -131,13 +131,15 @@ export async function agentLoop({
 						usage: { prompt_tokens: 0, completion_tokens: 0, total_tokens: 0 },
         },
     },
+		stream = false,
 }: {
     prompt: string;
     model?: string;
 		tools?: Tool[];
 		systemMessage?: string;
     state?: ThreadState;
-}): Promise<AgentResponse> {
+		stream?: boolean;
+}): Promise<AgentResponse | ReadableStream> {
 	// Add user input to memory
 	state = await agentMemory('user_input', prompt, state);
 
@@ -160,38 +162,12 @@ export async function agentLoop({
 			conversationHistory,
 			systemMessage,
 			model,
+			stream,
 		);
-		const responseContent =
-			typeof llmResponse.content === 'string'
-				? llmResponse.content
-				: JSON.stringify(llmResponse.content);
-
-		// Add LLM response to memory
-		state = await agentMemory('llm_response', responseContent, state, {
-			model: model,
-		});
-
-		state.thread.usage = (() => {
-			const u1 = llmResponse.usage || {};
-			const u2 = usage_metadata || {};
-			return {
-				prompt_tokens:
-					(u1.prompt_tokens || u1.input_tokens || 0) +
-					(u2.input_tokens || u2.prompt_tokens || 0),
-				completion_tokens:
-					(u1.completion_tokens || u1.output_tokens || 0) +
-					(u2.output_tokens || u2.completion_tokens || 0),
-				total_tokens:
-					(u1.total_tokens || u1.input_tokens + u1.output_tokens || 0) +
-					(u2.total_tokens || u2.input_tokens + u2.output_tokens || 0),
-			};
-		})();
-
-		return {
-			content: responseContent,
-			state,
-			tokens: llmResponse.usage,
-		};
+		if (stream) {
+			return streamHandler(llmResponse, state);
+		}
+		return await jsonHandler(llmResponse, state, model, usage_metadata);
 	} catch (error) {
 		const errorMessage = `LLM call failed: ${
 			error instanceof Error ? error.message : 'Unknown error'
