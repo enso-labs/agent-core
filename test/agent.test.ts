@@ -17,7 +17,7 @@ const getWeatherTool = tool(getWeather, {
 
 describe('agentLoop', () => {
 
-  it.skip('should return a response', async () => {
+  it('should return a response', async () => {
     const result = await agentLoop({
       prompt: 'Who won the 2001 world series?',
     });
@@ -27,7 +27,7 @@ describe('agentLoop', () => {
     assert((result as any).state);
   });
 
-  it.skip('should return a tool call response', async () => {
+  it('should return a tool call response', async () => {
     const result = await agentLoop({
       prompt: 'What is the weather in Tokyo?',
       tools: [getWeatherTool] as unknown as Tool[],
