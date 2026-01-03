@@ -5,7 +5,7 @@ import type { ToolIntent, ToolRunMode } from "./entities/tool.js";
 import { Tool } from "langchain/tools";
 import { jsonHandler, streamHandler } from "./utils/stream.js";
 
-export const DEFAULT_MODEL = "openai:gpt-4.1-nano";
+export const DEFAULT_MODEL = "openai:gpt-4.1-nan        o";
 
 export async function agentMemory(
 	toolIntent: {intent: string; args: any} | string,
