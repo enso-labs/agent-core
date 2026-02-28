@@ -3,7 +3,7 @@ import {initChatModel} from 'langchain/chat_models/universal';
 
 export async function getModel(modelName?: string): Promise<BaseChatModel> {
 	if (!modelName) {
-		modelName = 'openai:gpt-4o-mini';
+		modelName = 'openai:gpt-5-nano';
 	}
 	const modelNameString = modelName.toString();
 	const model = await initChatModel(modelNameString, {

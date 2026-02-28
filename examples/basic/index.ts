@@ -17,7 +17,7 @@ const getWeatherTool = tool(getWeather, {
 
 async function main() {
 	const response = await agentLoop({
-		prompt: "What is the weather in San Francisco?",
+		prompt: "What is the weather in San Francisco and LA?",
 		tools: [getWeatherTool as unknown as Tool],
 	});
 	console.log(JSON.stringify(response, null, 2));

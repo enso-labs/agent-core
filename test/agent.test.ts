@@ -52,7 +52,7 @@ describe('agentLoop', () => {
     const decoder = new TextDecoder();
     const chunks: string[] = [];
     let hasMemory = false;
-    let hasContent = false;
+    let hasLlmResponse = false;
     let hasComplete = false;
     
     try {
@@ -75,8 +75,8 @@ describe('agentLoop', () => {
               assert(data.state, 'Memory chunk should have state');
               assert(data.state.thread, 'State should have thread');
               assert(Array.isArray(data.state.thread.events), 'Thread should have events array');
-            } else if (data.type === 'content') {
-              hasContent = true;
+            } else if (data.type === 'llm_response') {
+              hasLlmResponse = true;
               assert(typeof data.content === 'string', 'Content should be a string');
             } else if (data.type === 'complete') {
               hasComplete = true;
@@ -91,7 +91,7 @@ describe('agentLoop', () => {
     
     // Validate we received all expected chunk types
     assert(hasMemory, 'Stream should include memory chunk');
-    assert(hasContent, 'Stream should include content chunks');
+    assert(hasLlmResponse, 'Stream should include llm_response chunks');
     assert(hasComplete, 'Stream should include completion chunk');
     assert(chunks.length > 0, 'Should receive at least one chunk');
   });

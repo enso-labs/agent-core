@@ -21,7 +21,7 @@ export function streamHandler(llmStream: any, state: ThreadState) {
 					if (content) {
 						fullResponse += content;
 						controller.enqueue(encoder.encode(`data: ${JSON.stringify({ 
-							type: 'content', 
+							type: 'llm_response', 
 							content: content 
 						})}\n\n`));
 					}

@@ -36,27 +36,35 @@ const newState = await agentMemory(
 );
 ```
 
-#### `executeTools(toolIntents, state, tools)`
+#### `executeTools(toolIntents, state, tools, options?)`
 
-Executes multiple tool intents and updates the state with results.
+Executes multiple tool intents (optionally in parallel) and returns the updated state alongside execution telemetry.
 
 **Parameters:**
 - `toolIntents`: `ToolIntent[]` - Array of tool intents to execute
 - `state`: `ThreadState` - Current thread state
 - `tools`: `Tool[]` - Array of available LangChain tools
+- `options?`: `ParallelExecutionOptions` - Optional configuration including `concurrency`, `onResult` callback, and `scheduler` hooks
 
-**Returns:** `Promise<ThreadState>` - Updated state with tool execution results
+**Returns:** `Promise<{ state: ThreadState; summary: ToolExecutionSummary }>` - Result containing the updated state plus execution summary metadata
 
 **Example:**
 ```typescript
 import { executeTools } from '@enso-labs/agent-core';
-import { Tool } from 'langchain/tools';
+import type { ParallelExecutionOptions } from '@enso-labs/agent-core';
 
 const toolIntents = [
-  { intent: 'search', args: { query: 'weather today' } }
+  { intent: 'web_search', args: { query: 'weather today' }, runMode: 'parallel' },
+  { intent: 'web_search', args: { query: 'sunset time' }, runMode: 'parallel' }
 ];
 
-const updatedState = await executeTools(toolIntents, currentState, availableTools);
+const options: ParallelExecutionOptions = {
+  concurrency: 2,
+  onResult: (result) => console.log('tool finished', result.intent.intent, result.status)
+};
+
+const { state: updatedState, summary } = await executeTools(toolIntents, currentState, availableTools, options);
+console.log(summary.successCount, summary.failureCount);
 ```
 
 #### `convertStateToXML(state)`
@@ -134,6 +142,9 @@ Response structure returned by `agentLoop()` containing:
 Structure for tool execution requests:
 - `intent`: string - Tool name/identifier
 - `args`: any - Tool arguments
+- `runMode?`: `'parallel' | 'sequential'` - Execution preference (defaults to sequential)
+- `priority?`: `number` - Optional scheduling priority (lower numbers execute sooner within a parallel batch)
+- `groupId?`: `string` - Identifier to batch related intents in the same parallel group
 
 ## Error Handling
 
